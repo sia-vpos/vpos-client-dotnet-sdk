@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "VPOS_Test/1.0.0": {
+        "dependencies": {
+          "VPOS-Library": "1.0.0"
+        },
+        "runtime": {
+          "VPOS_Test.dll": {}
+        }
+      },
+      "VPOS-Library/1.0.0": {
+        "runtime": {
+          "VPOS-Library.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "VPOS_Test/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "VPOS-Library/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,10 @@
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\bin\Debug\netstandard2.0\VPOS-Library.deps.json
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\bin\Debug\netstandard2.0\VPOS-Library.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\bin\Debug\netstandard2.0\VPOS-Library.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.csprojAssemblyReference.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.AssemblyInfoInputs.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.AssemblyInfo.cs
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS_Library.Properties.Resources.resources
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Library\obj\Debug\netstandard2.0\VPOS-Library.csproj.GenerateResource.cache

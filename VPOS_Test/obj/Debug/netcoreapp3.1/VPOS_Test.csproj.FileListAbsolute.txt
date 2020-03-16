@@ -1,0 +1,14 @@
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.exe
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.deps.json
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.runtimeconfig.json
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.runtimeconfig.dev.json
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS_Test.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS-Library.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\bin\Debug\netcoreapp3.1\VPOS-Library.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.csprojAssemblyReference.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.AssemblyInfoInputs.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.AssemblyInfo.cs
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.csproj.CopyComplete
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS_Test\obj\Debug\netcoreapp3.1\VPOS_Test.pdb

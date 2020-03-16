@@ -1,0 +1,11 @@
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\bin\Debug\netstandard2.0\VPOS-Test.deps.json
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\bin\Debug\netstandard2.0\VPOS-Test.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\bin\Debug\netstandard2.0\VPOS-Test.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\bin\Debug\netstandard2.0\VPOS-Library.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\bin\Debug\netstandard2.0\VPOS-Library.pdb
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.csprojAssemblyReference.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.AssemblyInfoInputs.cache
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.AssemblyInfo.cs
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.csproj.CopyComplete
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.dll
+C:\Users\gab.marini\source\repos\VPOS-Library\VPOS-Test\obj\Debug\netstandard2.0\VPOS-Test.pdb

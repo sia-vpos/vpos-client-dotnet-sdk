@@ -1,0 +1,88 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "VPOS-Library/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/VPOS-Library.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/VPOS-Library.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "VPOS-Library/1.0.0": {
+      "type": "project",
+      "path": "../VPOS-Library/VPOS-Library.csproj",
+      "msbuildProject": "../VPOS-Library/VPOS-Library.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "VPOS-Library >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\gab.marini\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\gab.marini\\source\\repos\\VPOS-Library\\VPOS_Test\\VPOS_Test.csproj",
+      "projectName": "VPOS_Test",
+      "projectPath": "C:\\Users\\gab.marini\\source\\repos\\VPOS-Library\\VPOS_Test\\VPOS_Test.csproj",
+      "packagesPath": "C:\\Users\\gab.marini\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\gab.marini\\source\\repos\\VPOS-Library\\VPOS_Test\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\gab.marini\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "projectReferences": {
+            "C:\\Users\\gab.marini\\source\\repos\\VPOS-Library\\VPOS-Library\\VPOS-Library.csproj": {
+              "projectPath": "C:\\Users\\gab.marini\\source\\repos\\VPOS-Library\\VPOS-Library\\VPOS-Library.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
