@@ -23,10 +23,17 @@ namespace VPOS_Library.XML.Models
         public T Data;
     }
 
-    public class Data3DS : Printable
+    public class Data3DSResponse : Printable
     {
         public Authorization Authorization;
         public VBVRedirect VBVRedirect;
+        public PanAliasData PanAliasData;
+        public ThreeDSMethod ThreeDSMethod;
+        public ThreeDSChallenge ThreeDSChallenge;
+    }
+
+    public class DataAuthorize : Printable {
+        public Authorization Authorization;
         public PanAliasData PanAliasData;
     }
 
@@ -95,6 +102,21 @@ namespace VPOS_Library.XML.Models
         public string PanAliasRev;
         public string PanAliasExpDate;
         public string PanAliasTail;
+        public string MAC;
+    }
+
+    public class ThreeDSMethod : Printable {
+        public string ThreeDSTransId;
+        public string ThreeDSMethodData;
+        public string ThreeDSMethodUrl;
+        public string MAC;
+    }
+
+    public class ThreeDSChallenge : Printable
+    {
+        public string ThreeDSTransId;
+        public string CReq;
+        public string ACSUrl;
         public string MAC;
     }
 

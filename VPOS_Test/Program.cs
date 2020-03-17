@@ -7,6 +7,7 @@ using VPOS_Library.Models;
 using VPOS_Library.Utils.MAC;
 using VPOS_Library.Utils;
 using VPOS_Library.XML;
+using VPOS_Library.Request;
 using VPOS_Library.XMLModels.Request;
 
 namespace VPOS_Test
@@ -49,14 +50,13 @@ namespace VPOS_Test
             Console.WriteLine(encoder.GetMac(dict, "key"));
             //TestHtmlTool();
             //TestRestClient();
-            //TestTimeFormat();
+
             //TestXMLSerializer();
             //TestAuth3ds();
             //TestOrderStatus();
             //TestVerify();
             //TestRefund();
-            //TestAccounting();
-            //TestInject();
+            TestAuthorize();
             //TestGetHtmlDocument();
         }
 
@@ -81,10 +81,10 @@ namespace VPOS_Test
             Console.WriteLine(XmlTool.Serialize(request));
         }
 
-        static void TestAuth3ds()
+        /*static void TestAuth3ds()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
             var requestData = new AuthorizationRequest();
             var random = new Random();
             requestData.Amount = "2000";
@@ -102,89 +102,74 @@ namespace VPOS_Test
             request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
             var response = vposClient.Start3DsAuth(request);
             Console.WriteLine(response.ToString());
-        }
+        }*/
 
-        static void TestAuth3DSStep2()
+        /*static void TestAuth3DSStep2()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
             var requestData = new AuthorizationRequest3DSStep2();
 
             var request = new BPWXmlRequest<AuthorizationRequest3DSStep2>(requestData);
             request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
             var response = vposClient.Start3DsAuthStep2(request);
             Console.WriteLine(response.ToString());
-        }
+        }*/
 
-        static void TestVerify()
-        {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
-            var requestData = new VerifyRequest();
-            requestData.OriginalReqRefNum = "20200203995384882482691632900815";
-
-            var request = new BPWXmlRequest<VerifyRequest>(requestData);
-            request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
-            var response = vposClient.VerifyRequest(request);
-            Console.WriteLine(response.ToString());
-        }
+        
 
         static void TestRefund()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+
             var requestData = new RefundRequest();
             requestData.Amount = "10";
             requestData.Currency = "978";
             requestData.TransactionID = "8032112928AT2415xxp7isdz4";
             requestData.OrderId = "713739306616251603317204";
-
-            var request = new BPWXmlRequest<RefundRequest>(requestData);
-            request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
-            var response = vposClient.RefundPayment(request);
+            requestData.OperatorID = OPERATOR_ID;
+            var response = vposClient.Refund(requestData);
             Console.WriteLine(response.ToString());
         }
 
         static void TestAccounting()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
-            var requestData = new AccountingRequest();
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+            var requestData = new CaptureRequest();
             requestData.Amount = "10";
             requestData.Currency = "978";
             requestData.TransactionID = "8032112928AT2415xxp7isdz4";
             requestData.OrderId = "713739306616251603317204";
-
-            var request = new BPWXmlRequest<AccountingRequest>(requestData);
-            request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
-            var response = vposClient.ConfirmTransaction(request);
+            requestData.OperatorID = OPERATOR_ID;
+            var response = vposClient.Capture(requestData);
             Console.WriteLine(response.ToString());
         }
 
         static void TestOrderStatus()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
-            var requestData = new OrderStatusRequest();
-            requestData.OrderID = "042221867378323197573301";
-
-            var request = new BPWXmlRequest<OrderStatusRequest>(requestData);
-            request.SetHeaderInfo(SHOP_ID, OPERATOR_ID);
-            var response = vposClient.GetOrderStatus(request);
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+            var requestData = new OrderStatusRequest(SHOP_ID,OPERATOR_ID, "042221867378323197573301");
+            var response = vposClient.GetOrderStatus(requestData);
             Console.WriteLine(response.Data.Authorizations[0]);
         }
 
-        static void TestInject()
-        {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
-            vposClient.InjectHtmlTemplate("PGh0bWw+PGJvZHk+PC9ib2R5PjwvaHRtbD4=", 500);
+        static void TestAuthorize() {
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+            var requestData = new AuthorizeRequest("12345676912", "OPERATOR", "4598250000000027", "2112", "6000", "978", "I", "93");
+            requestData.CVV2 = "111";
+            requestData.EmailCh = "asd@gmail.it";
+            var response = vposClient.Authorize(requestData);
+            Console.WriteLine(response.Data.Authorization);
         }
 
         static void TestGetHtmlDocument()
         {
-            var vposClient = new VPOSClientAbstract(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS);
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
             var paymentInfo = new PaymentInfo();
             paymentInfo.Amount = "1000";
             paymentInfo.Currency = "978";
@@ -196,7 +181,51 @@ namespace VPOS_Test
             paymentInfo.AccountingMode = "D";
             paymentInfo.AuthorMode = "I";
             paymentInfo.AddOption('M');
-            Console.WriteLine(vposClient.GetHtmlPaymentDocument(paymentInfo, URL_REDIRECT));
+            paymentInfo.Data3DS = build3DSData();
+            
+            Console.WriteLine(vposClient.BuildHtmlPaymentFragment(paymentInfo));
+        }
+
+        static Data3DSJSON build3DSData() {
+            var data3DS = new Data3DSJSON();
+
+            data3DS.addrMatch = "N";
+            data3DS.chAccAgeInd = "04";
+            data3DS.chAccChange = "20190211";
+            data3DS.chAccChangeInd = "03";
+            data3DS.chAccDate = "20190210";
+            data3DS.chAccPwChange = "20190214";
+            data3DS.chAccPwChangeInd = "04";
+            data3DS.nbPurchaseAccount = "1000";
+            data3DS.txnActivityDay = "100";
+            data3DS.txnActivityYear = "100";
+            data3DS.shipAddressUsage = "20181220";
+            data3DS.shipAddressUsageInd = "03";
+            data3DS.shipNameIndicator = "01";
+            data3DS.billAddrCity = "billAddrCity";
+            data3DS.billAddrCountry = "004";
+            data3DS.billAddrLine1 = "billAddrLine1";
+            data3DS.billAddrLine2 = "billAddrLine2";
+            data3DS.billAddrLine3 = "billAddrLine3";
+            data3DS.billAddrPostCode = "billAddrPostCode";
+            data3DS.billAddrState = "MI";
+
+            data3DS.homePhone = "39-321818198";
+            data3DS.mobilePhone = "33-312";
+            data3DS.shipAddrCity = "zio";
+            data3DS.shipAddrCountry = "008";
+            data3DS.shipAddrLine1 = "shipAddrLine1";
+            data3DS.shipAddrLine2 = "shipAddrLine2";
+            data3DS.shipAddrLine3 = "shipAddrLine3";
+            data3DS.shipAddrPostCode = "shipAddrPostCode";
+            data3DS.shipAddrState = "222";
+            data3DS.workPhone = "39-0321818198";
+            data3DS.deliveryEmailAddress = "a-b@example.com";
+            data3DS.deliveryTimeframe = "02";
+            data3DS.preOrderDate = "20181220";
+            data3DS.preOrderPurchaseInd = "01";
+            data3DS.shipNameIndicator = "01";
+            return data3DS;
         }
     }
 }

@@ -1,0 +1,4 @@
+VPOS_Test/bin/Debug/netcoreapp3.1/IKVM.OpenJDK.XML.WebServices.dll
+*.dll
+*.ide-wal
+*.ide-shm

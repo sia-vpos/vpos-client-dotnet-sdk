@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.ConstrainedExecution;
 using System.Xml.Serialization;
+using VPOS_Library.Models;
 
 namespace VPOS_Library.XMLModels.Request
 {
@@ -37,16 +38,20 @@ namespace VPOS_Library.XMLModels.Request
 
         private Operation GetOperation()
         {
-            if (Data.RequestTag is AuthorizationRequest)
-                return Operation.AUTHORIZATION3DSSTEP1;
-            if (Data.RequestTag is AuthorizationRequest3DSStep2)
-                return Operation.AUTHORIZATION3DSSTEP2;
-            if (Data.RequestTag is RefundRequest)
+            if (Data.RequestTag is AuthorizeRequestXML)
+                return Operation.AUTHORIZATION;
+            if (Data.RequestTag is RefundRequestXML)
                 return Operation.REFUND;
-            if (Data.RequestTag is AccountingRequest)
+            if (Data.RequestTag is AccountingRequestXML)
                 return Operation.ACCOUNTING;
-            if (Data.RequestTag is OrderStatusRequest)
+            if (Data.RequestTag is OrderStatusRequestXML)
                 return Operation.ORDERSTATUS;
+            if (Data.RequestTag is ThreeDSAuthorization0RequestXML)
+                return Operation.THREEDSAUTHORIZATION0;
+            if (Data.RequestTag is ThreeDSAuthorization1RequestXML)
+                return Operation.THREEDSAUTHORIZATION1;
+            if (Data.RequestTag is ThreeDSAuthorization2RequestXML)
+                return Operation.THREEDSAUTHORIZATION2;
             return Operation.VERIFY;
         }
 
@@ -213,7 +218,85 @@ namespace VPOS_Library.XMLModels.Request
         }
     }
 
-    public class RefundRequest : ManageRequest
+    public class ThreeDSAuthorization0RequestXML : GenericRequest 
+    {
+        private const string TagName = "ThreeDSAuthorizationRequest0";
+
+        public string Data3DS;
+        public string OrderID;
+        public string PAN;
+        public string CVV2;
+        public string ExpDate;
+        public string Amount;
+        public string Currency;
+        public string Exponent;
+        public string AccountingMode;
+        public string Network;
+        public string EmailCH;
+        public string NameCH;
+        public string Userid;
+        public string Acquirer;
+        public string IpAddress;
+        public string UsrAuthFlag;
+        public string OpDescr;
+        public string Antifraud;
+        public string ProductRef;
+        public string Name;
+        public string Surname;
+        public string TaxID;
+        public string CreatePanAlias;
+        public string NotifUrl;
+        public string CProf;
+        public string ThreeDSMtdNotifUrl;
+        public string ChallengeWinSize;
+        
+        
+
+        public ThreeDSAuthorization0RequestXML() : base()
+        {
+            
+        }
+
+        public override string GetRequestTag()
+        {
+            return TagName;
+        }
+    }
+    public class ThreeDSAuthorization1RequestXML : GenericRequest
+    {
+        private const string TagName = "ThreeDSAuthorizationRequest1";
+
+        public string ThreeDSTransId;
+        public string ThreeDSMtdComplInd;
+
+        public ThreeDSAuthorization1RequestXML() : base()
+        {
+
+        }
+
+        public override string GetRequestTag()
+        {
+            return TagName;
+        }
+    }
+    public class ThreeDSAuthorization2RequestXML : GenericRequest
+    {
+        private const string TagName = "ThreeDSAuthorizationRequest2";
+
+        public string ThreeDSTransId;
+        
+
+        public ThreeDSAuthorization2RequestXML() : base()
+        {
+
+        }
+
+        public override string GetRequestTag()
+        {
+            return TagName;
+        }
+    }
+    public class RefundRequestXML : ManageRequest
     {
         private const string TagName = "Refund";
 
@@ -223,7 +306,7 @@ namespace VPOS_Library.XMLModels.Request
         }
     }
 
-    public class AccountingRequest : ManageRequest
+    public class AccountingRequestXML : ManageRequest
     {
         private const string TagName = "Accounting";
 
@@ -233,14 +316,50 @@ namespace VPOS_Library.XMLModels.Request
         }
     }
 
-    public class OrderStatusRequest : GenericRequest
+    public class AuthorizeRequestXML : GenericRequest
+    {
+        private const string TagName = "AuthorizationRequest";
+
+       
+        public string OrderID;
+        public string PAN;
+        public string CVV2;
+        public string ExpDate;
+        public string Amount;
+        public string Currency;
+        public string Exponent;
+        public string AccountingMode;
+        public string Network;
+        public string EmailCH;
+        public string Userid;
+        public string Acquirer;
+        public string UsrAuthFlag;
+        public string IpAddress;
+        public string OpDescr;
+        public string CreatePanAlias;
+        public string Antifraud;
+        public string ProductRef;
+  
+        public string Name;
+        public string Surname;
+        public string TaxID;
+
+        public AuthorizeRequestXML() : base() { }
+
+        public override string GetRequestTag()
+        {
+            return TagName;
+        }
+    }
+
+    public class OrderStatusRequestXML : GenericRequest
     {
         private const string TagName = "OrderStatus";
 
         public string OrderID;
         public string ProductRef;
 
-        public OrderStatusRequest() : base()
+        public OrderStatusRequestXML() : base()
         {
         }
 
@@ -269,10 +388,14 @@ namespace VPOS_Library.XMLModels.Request
     internal enum Operation
     {
         REFUND,
+        AUTHORIZATION,
         VERIFY,
         ORDERSTATUS,
         ACCOUNTING,
         AUTHORIZATION3DSSTEP1,
-        AUTHORIZATION3DSSTEP2
+        AUTHORIZATION3DSSTEP2,
+        THREEDSAUTHORIZATION0,
+        THREEDSAUTHORIZATION1, 
+        THREEDSAUTHORIZATION2
     }
 }

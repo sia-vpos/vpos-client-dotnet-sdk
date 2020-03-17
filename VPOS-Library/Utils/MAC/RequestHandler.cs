@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Runtime.ConstrainedExecution;
 using VPOS_Library.Models;
 using VPOS_Library.XMLModels.Request;
 
@@ -11,14 +10,16 @@ namespace VPOS_Library.Utils.MAC
         {
             var res = GetCommonParameters(request);
 
-            if (request.Data.RequestTag is AuthorizationRequest)
-                Auth3DSDictionary(request.Data.RequestTag, res);
-            else if (request.Data.RequestTag is AuthorizationRequest3DSStep2)
-                Auth3DSStep2Dictionary(request.Data.RequestTag, res);
-            else if (request.Data.RequestTag is VerifyRequest)
-                VerifyDictionary(request.Data.RequestTag, res);
-            else if (request.Data.RequestTag is OrderStatusRequest)
+            if (request.Data.RequestTag is AuthorizeRequestXML)
+                AuthorizeDictionary(request.Data.RequestTag, res);
+            else if (request.Data.RequestTag is OrderStatusRequestXML)
                 OrderStatusDictionary(request.Data.RequestTag, res);
+            else if (request.Data.RequestTag is ThreeDSAuthorization0RequestXML)
+                ThreeDSAuthorization0Dictionary(request.Data.RequestTag, res);
+            else if (request.Data.RequestTag is ThreeDSAuthorization1RequestXML)
+                ThreeDSAuthorization1Dictionary(request.Data.RequestTag, res);
+            else if (request.Data.RequestTag is ThreeDSAuthorization2RequestXML)
+                ThreeDSAuthorization2Dictionary(request.Data.RequestTag, res);
             else
                 ManageDictionary(request.Data.RequestTag, res);
             return res;
@@ -33,7 +34,7 @@ namespace VPOS_Library.Utils.MAC
             return result;
         }
 
-        public static OrderedDictionary GetRedirectDictionary(PaymentInfo paymentInfo)
+        public static OrderedDictionary GetRedirectDictionary(PaymentInfo paymentInfo, string apiSecretKey)
         {
             var result = new OrderedDictionary();
             result.Add("URLMS", paymentInfo.UrlMs);
@@ -63,7 +64,10 @@ namespace VPOS_Library.Utils.MAC
             result.Add("USER", paymentInfo.User);
             result.Add("PRODUCTREF", paymentInfo.ProductRef);
             result.Add("ANTIFRAUD", paymentInfo.AntiFraud);
-            result.Add("3DSDATA", paymentInfo.Data3DS);
+            if (paymentInfo.Data3DS != null)
+            {
+                result.Add("3DSDATA", AESEncoder.Encode3DSData(apiSecretKey, paymentInfo.Data3DS.ToJSONString()));
+            }
             return result;
         }
 
@@ -81,7 +85,7 @@ namespace VPOS_Library.Utils.MAC
 
         private static void Auth3DSDictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (AuthorizationRequest) request;
+            var specificRequest = (AuthorizationRequest)request;
             dictionary.Add("ORDERID", specificRequest.OrderID);
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("PAN", specificRequest.PAN);
@@ -104,22 +108,40 @@ namespace VPOS_Library.Utils.MAC
             dictionary.Add("NAME", specificRequest.Name);
             dictionary.Add("SURNAME", specificRequest.Surname);
             dictionary.Add("TAXID", specificRequest.TaxID);
-            dictionary.Add("INPERSON", specificRequest.InPerson);
-            dictionary.Add("MERCHANTURL", specificRequest.MerchantURL);
-            dictionary.Add("SERVICE", specificRequest.Data3DS.Service);
-            dictionary.Add("XID", specificRequest.Data3DS.Xid);
-            dictionary.Add("CAVV", specificRequest.Data3DS.CAVV);
-            dictionary.Add("ECI", specificRequest.Data3DS.Eci);
-            dictionary.Add("PP_AUTHENTICATEMETHOD", specificRequest.MasterpassData.PP_AuthenticateMethod);
-            dictionary.Add("PP_CARDENROLLMETHOD", specificRequest.MasterpassData.PP_CardEnrollMethod);
-            dictionary.Add("PARESSTATUS", specificRequest.Data3DS.ParesStaus);
-            dictionary.Add("SCENROLLSTATUS", specificRequest.Data3DS.ScEnrollStatus);
-            dictionary.Add("SIGNATUREVERIFICATION", specificRequest.Data3DS.SignatureVerifytion);
+
+        }
+
+        private static void AuthorizeDictionary(GenericRequest request, OrderedDictionary dictionary)
+        {
+            var specificRequest = (AuthorizeRequestXML)request;
+            dictionary.Add("ORDERID", specificRequest.OrderID);
+            AddCommonParameters(specificRequest, dictionary);
+            dictionary.Add("PAN", specificRequest.PAN);
+            dictionary.Add("CVV2", specificRequest.CVV2);
+            dictionary.Add("EXPDATE", specificRequest.ExpDate);
+            dictionary.Add("AMOUNT", specificRequest.Amount);
+            dictionary.Add("CURRENCY", specificRequest.Currency);
+            dictionary.Add("EXPONENT", specificRequest.Exponent);
+            dictionary.Add("ACCOUNTINGMODE", specificRequest.AccountingMode);
+            dictionary.Add("NETWORK", specificRequest.Network);
+            dictionary.Add("EMAILCH", specificRequest.EmailCH);
+            dictionary.Add("USERID", specificRequest.Userid);
+            dictionary.Add("ACQUIRER", specificRequest.Acquirer);
+            dictionary.Add("IPADDRESS", specificRequest.IpAddress);
+            dictionary.Add("OPDESCR", specificRequest.OpDescr);
+            dictionary.Add("USRAUTHFLAG", specificRequest.UsrAuthFlag);
+            dictionary.Add("OPTIONS", specificRequest.Options);
+            dictionary.Add("ANTIFRAUD", specificRequest.Antifraud);
+            dictionary.Add("PRODUCTREF", specificRequest.ProductRef);
+            dictionary.Add("NAME", specificRequest.Name);
+            dictionary.Add("SURNAME", specificRequest.Surname);
+            dictionary.Add("TAXID", specificRequest.TaxID);
+
         }
 
         private static void Auth3DSStep2Dictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (AuthorizationRequest3DSStep2) request;
+            var specificRequest = (AuthorizationRequest3DSStep2)request;
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("ORIGINALREQREFNUM", specificRequest.OriginalReqRefNum);
             dictionary.Add("PARES", specificRequest.Pares);
@@ -128,7 +150,7 @@ namespace VPOS_Library.Utils.MAC
 
         private static void VerifyDictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (VerifyRequest) request;
+            var specificRequest = (VerifyRequest)request;
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("ORIGINALREQREFNUM", specificRequest.OriginalReqRefNum);
             dictionary.Add("OPTIONS", specificRequest.Options);
@@ -136,16 +158,60 @@ namespace VPOS_Library.Utils.MAC
 
         private static void OrderStatusDictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (OrderStatusRequest) request;
+            var specificRequest = (OrderStatusRequestXML)request;
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("ORDERID", specificRequest.OrderID);
             dictionary.Add("OPTIONS", specificRequest.Options);
             dictionary.Add("PRODUCTREF", specificRequest.ProductRef);
         }
 
+        private static void ThreeDSAuthorization0Dictionary(GenericRequest request, OrderedDictionary dictionary)
+        {
+            var specificRequest = (ThreeDSAuthorization0RequestXML)request;
+            dictionary.Add("ORDERID", specificRequest.OrderID);
+            AddCommonParameters(specificRequest, dictionary);
+            dictionary.Add("PAN", specificRequest.PAN);
+            dictionary.Add("CVV2", specificRequest.CVV2);
+            dictionary.Add("EXPDATE", specificRequest.ExpDate);
+            dictionary.Add("AMOUNT", specificRequest.Amount);
+            dictionary.Add("CURRENCY", specificRequest.Currency);
+            dictionary.Add("EXPONENT", specificRequest.Exponent);
+            dictionary.Add("ACCOUNTINGMODE", specificRequest.AccountingMode);
+            dictionary.Add("NETWORK", specificRequest.Network);
+            dictionary.Add("EMAILCH", specificRequest.EmailCH);
+            dictionary.Add("USERID", specificRequest.Userid);
+            dictionary.Add("ACQUIRER", specificRequest.Acquirer);
+            dictionary.Add("IPADDRESS", specificRequest.IpAddress);
+            dictionary.Add("OPDESCR", specificRequest.OpDescr);
+            dictionary.Add("USRAUTHFLAG", specificRequest.UsrAuthFlag);
+            dictionary.Add("OPTIONS", specificRequest.Options);
+            dictionary.Add("ANTIFRAUD", specificRequest.Antifraud);
+            dictionary.Add("PRODUCTREF", specificRequest.ProductRef);
+            dictionary.Add("NAME", specificRequest.Name);
+            dictionary.Add("SURNAME", specificRequest.Surname);
+            dictionary.Add("TAXID", specificRequest.TaxID);
+            dictionary.Add("THREEDSDATA", specificRequest.Data3DS);
+            dictionary.Add("NOTIFURL", specificRequest.NotifUrl);
+            dictionary.Add("THREEDSMTDNOTIFURL", specificRequest.ThreeDSMtdNotifUrl);
+            dictionary.Add("CHALLENGEWINSIZE", specificRequest.ChallengeWinSize);
+        }
+        private static void ThreeDSAuthorization1Dictionary(GenericRequest request, OrderedDictionary dictionary)
+        {
+            var specificRequest = (ThreeDSAuthorization1RequestXML)request;
+            AddCommonParameters(specificRequest, dictionary);
+            dictionary.Add("THREEDSTRANSID", specificRequest.ThreeDSTransId);
+            dictionary.Add("THREEDSMTDCOMPLIND", specificRequest.ThreeDSMtdComplInd);
+        }
+        private static void ThreeDSAuthorization2Dictionary(GenericRequest request, OrderedDictionary dictionary)
+        {
+            var specificRequest = (ThreeDSAuthorization1RequestXML)request;
+            AddCommonParameters(specificRequest, dictionary);
+            dictionary.Add("THREEDSTRANSID", specificRequest.ThreeDSTransId);
+            
+        }
         private static void ManageDictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (ManageRequest) request;
+            var specificRequest = (ManageRequest)request;
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("TRANSACTIONID", specificRequest.TransactionID);
             dictionary.Add("ORDERID", specificRequest.OrderId);

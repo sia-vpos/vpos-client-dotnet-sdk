@@ -32,7 +32,7 @@
         public string TaxId { get; set; }
         public string ProductRef { get; set; }
         public string AntiFraud { get; set; }
-        public Data3ds Data3DS { get; set; }
+        public Data3DSJSON Data3DS { get; set; }
 
         public void AddOption(char option)
         {
