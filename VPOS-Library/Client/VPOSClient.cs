@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using VPOS_Library.Models;
 using VPOS_Library.Utils;
 using VPOS_Library.Utils.Exception;
@@ -10,7 +9,7 @@ using VPOS_Library.XMLModels.Request;
 using VPOS_Library.Request;
 using Operation = VPOS_Library.XML.Models.Operation;
 using java.lang;
-using Data3DS = VPOS_Library.Models.Data3DSJSON;
+using System.Web;
 
 namespace VPOS_Library.Client
 {
@@ -103,114 +102,164 @@ namespace VPOS_Library.Client
 
         public string BuildHtmlPaymentFragment(PaymentInfo paymentInfo)
         {
-            string  url= "https://atpostest.ssb.it/atpos/pagamenti/main";
+            // Build dictionary with input params
             var redirectDictionary = RequestHandler.GetRedirectDictionary(paymentInfo, _apiResultKey);
+            //Calculate MAC and add to dictionary
             var redirectMac = _encoder.GetMac(redirectDictionary, _startKey);
             redirectDictionary.Add("MAC", redirectMac);
+            // Add UrlBack and ShopEmail
             RequestHandler.AddMissingParameter(redirectDictionary, paymentInfo);
-            return _htmlTool.BuildHtml(url , redirectDictionary);
+            // Build HTML div and return
+            return _htmlTool.BuildHtml(_urlRedirect , redirectDictionary);
         }
 
         public bool VerifyMac(string urlDone)
         { 
-            
+            // Extracts params from url
             var paramsDictionary = Utils.Utils.splitQuery(urlDone);
+            // Get received MAC
             var receivedMAc = paramsDictionary["MAC"];
+            // Calculate MAC
             var ordereDictionary = Utils.Utils.getUrlDoneDictionary(paramsDictionary);
             var redirectMac = _encoder.GetMac(ordereDictionary, _startKey);
+            // Compare the received Mac with the calculated one
             return redirectMac.Equals(receivedMAc);
                 
         }
 
         public BPWXmlResponse<DataAuthorize> Authorize(AuthorizeRequest authorize) {
+            // Validate request
+            RequestValidator.ValidateAuthorizeRequest(authorize);
+            // Map input request in the XML Request
             var request = RequestMapper.MapAuthorizeRequest(authorize, _shopId);
+            // Calculate and set MAC
             request.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(request), _apiResultKey);
             var xmlBody = XmlTool.Serialize(request);
+            // Do call to VPOS
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
+            // Map response
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<DataAuthorize>>(xmlResponse);
+            // Verify Response MAC
+            VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
+            VerifyPanAliasData(objectResponse.Data.PanAliasData);
             return objectResponse;
         }
 
         public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize0(ThreeDSAuthorization0Request request) {
+            // Validate request
+            RequestValidator.ValidateThreeDSAuthorize0Request(request);
+            // Map input request in the XML Request
             var requestXML = RequestMapper.MapThreeDSAuthorization0Request(request,_shopId);
-
+            // Calculate and set MAC
             requestXML.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(requestXML), _apiResultKey);
+            // Url Encode ThreeDSData to correctly send it
+            requestXML.Data.RequestTag.ThreeDSData = HttpUtility.UrlEncode(requestXML.Data.RequestTag.ThreeDSData);
             var xmlBody = XmlTool.Serialize(requestXML);
+            // Do call
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
+            // Map response
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<Data3DSResponse>>(xmlResponse);
+            // Verify Response MAC
+            VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
-            // TODO: verify challenge and threedsmethod
+            VerifyPanAliasData(objectResponse.Data.PanAliasData);
+            VerifyThreeDSChallenge(objectResponse.Data.ThreeDSChallenge);
+            VerifyThreeDSMethod(objectResponse.Data.ThreeDSMethod);
             return objectResponse;
         }
 
         public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize1(ThreeDSAuthorization1Request request)
         {
+            // Validate request
+            RequestValidator.ValidateThreeDSAuthorize1Request(request);
+            // Map input request in the XML Request
             var requestXML = RequestMapper.MapThreeDSAuthorization1Request(request, _shopId);
-
+            // Calculate and set MAC
             requestXML.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(requestXML), _apiResultKey);
             var xmlBody = XmlTool.Serialize(requestXML);
+            // Do call to VPOS
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
+            // Map response
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<Data3DSResponse>>(xmlResponse);
+            // Verify Mac Response
+            VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
-            // TODO: verify challenge and threedsmethod
+            VerifyPanAliasData(objectResponse.Data.PanAliasData);
+            VerifyThreeDSChallenge(objectResponse.Data.ThreeDSChallenge);           
             return objectResponse;
         }
 
         public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize2(ThreeDSAuthorization2Request request)
         {
+            // Validate request
+            RequestValidator.ValidateThreeDSAuthorize2Request(request);
+            // Map input request in the XML Request
             var requestXML = RequestMapper.MapThreeDSAuthorization2Request(request, _shopId);
-
+            // Calculate and set MAC
             requestXML.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(requestXML), _apiResultKey);
             var xmlBody = XmlTool.Serialize(requestXML);
+            // Do call to VPOS
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<Data3DSResponse>>(xmlResponse);
+            // Verify Mac Response
+            VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
-            // TODO: verify challenge and threedsmethod
+            VerifyPanAliasData(objectResponse.Data.PanAliasData);
             return objectResponse;
         }
         
         public BPWXmlResponse<DataManageOperation> Capture(CaptureRequest captureRequest)
         {
+            // Validate request
+            RequestValidator.ValidateCaptureRequest(captureRequest);
+            // Map input request in the XML Request
             var request = RequestMapper.MapCaptureRequest(captureRequest, _shopId);
             //calculate MAC
             request.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(request), _apiResultKey);
             var xmlBody = XmlTool.Serialize(request);
+            // Do call to VPOS
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<DataManageOperation>>(xmlResponse);
+            // Verify Mac Response
+            VerifyMacResponse(objectResponse);
             VerifyOperation(objectResponse.Data.Operation);
             return objectResponse;
         }
 
         public BPWXmlResponse<DataManageOperation> Refund(RefundRequest request)
         {
+            // Validate Request
+            RequestValidator.ValidateRefundRequest(request);
+            // Map input request in the XML Request
             var requestXML = RequestMapper.MapRefundRequest(request, _shopId);
-
+            //calculate MAC
             requestXML.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(requestXML), _apiResultKey);
-
-            // CALL
+            // Do call to VPOS
             var xmlBody = XmlTool.Serialize(requestXML);
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<DataManageOperation>>(xmlResponse);
+            // Verify Mac Response
+            VerifyMacResponse(objectResponse);
             VerifyOperation(objectResponse.Data.Operation);
             return objectResponse;
         }
 
         public BPWXmlResponse<DataOrderStatus> GetOrderStatus(OrderStatusRequest orderStatusRequest)
         {
+            // Validate Request
+            RequestValidator.ValidateOrderStatusRequest(orderStatusRequest);
             // Build Request object
-            var requestData = new OrderStatusRequestXML();
-            requestData.OrderID = orderStatusRequest.OrderId;
-            requestData.ProductRef = orderStatusRequest.ProductRef;
-            var request = new BPWXmlRequest<OrderStatusRequestXML>(requestData);
-
-            request.SetHeaderInfo(_shopId, orderStatusRequest.OperatorID);
+            var request = RequestMapper.MapOrderStatusRequest(orderStatusRequest,_shopId);
             request.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(request), _apiResultKey);
-
             var xmlBody = XmlTool.Serialize(request);
+            // Do call to VPOS
             var xmlResponse = _restClient.CallApi(_urlAPI, xmlBody);
+            // Map response
             var objectResponse = XmlTool.Deserialize<BPWXmlResponse<DataOrderStatus>>(xmlResponse);
-
+            // Verify Mac Response
+            VerifyMacResponse(objectResponse);
+            VerifyPanAliasData(objectResponse.Data.PanAliasData);
             foreach (var authorization in objectResponse.Data.Authorizations)
                 VerifyAuthorization(authorization);
 
@@ -240,25 +289,13 @@ namespace VPOS_Library.Client
             }
         }
 
-        private void VerifyResponse(Verify verify)
-        {
-            if (verify != null)
+        private void VerifyMacResponse<T>(BPWXmlResponse<T> response) {
+            if (response != null)
             {
-                var digest = _encoder.GetMac(ResponseHandler.VerifyMacList(verify), _apiResultKey);
-                if (!digest.Equals(MacNeutralValue) && !digest.Equals(verify.MAC))
+                var digest = _encoder.GetMac(ResponseHandler.ResponseMacList(response), _apiResultKey);
+                if (!digest.Equals(MacNeutralValue) && !digest.Equals(response.MAC))
                     throw new IncorrectMacException(
                         "Verify digest not corresponding to the calculated one. Possible data corruption!");
-            }
-        }
-
-        private void VerifyVbvRedirect(VBVRedirect vbvRedirect)
-        {
-            if (vbvRedirect != null)
-            {
-                var digest = _encoder.GetMac(ResponseHandler.VbvRedirectMacList(vbvRedirect), _apiResultKey);
-                if (!digest.Equals(MacNeutralValue) && !digest.Equals(vbvRedirect.MAC))
-                    throw new IncorrectMacException(
-                        "VBVRedirect digest not corresponding to the calculated one. Possible data corruption!");
             }
         }
 
@@ -270,6 +307,28 @@ namespace VPOS_Library.Client
                 if (!digest.Equals(MacNeutralValue) && !digest.Equals(panAliasData.MAC))
                     throw new IncorrectMacException(
                         "PanAliasData digest not corresponding to the calculated one. Possible data corruption!");
+            }
+        }
+
+        private void VerifyThreeDSMethod(ThreeDSMethod threeDSMethod)
+        {
+            if (threeDSMethod != null)
+            {
+                var digest = _encoder.GetMac(ResponseHandler.ThreeDSMethodMacList(threeDSMethod), _apiResultKey);
+                if (!digest.Equals(MacNeutralValue) && !digest.Equals(threeDSMethod.MAC))
+                    throw new IncorrectMacException(
+                        "ThreeDSMethod digest not corresponding to the calculated one. Possible data corruption!");
+            }
+        }
+
+        private void VerifyThreeDSChallenge(ThreeDSChallenge threeDSChallenge)
+        {
+            if (threeDSChallenge != null)
+            {
+                var digest = _encoder.GetMac(ResponseHandler.ThreeDSChallengeMacList(threeDSChallenge), _apiResultKey);
+                if (!digest.Equals(MacNeutralValue) && !digest.Equals(threeDSChallenge.MAC))
+                    throw new IncorrectMacException(
+                        "ThreeDSChallenge digest not corresponding to the calculated one. Possible data corruption!");
             }
         }
 

@@ -222,7 +222,7 @@ namespace VPOS_Library.XMLModels.Request
     {
         private const string TagName = "ThreeDSAuthorizationRequest0";
 
-        public string Data3DS;
+        public string ThreeDSData;
         public string OrderID;
         public string PAN;
         public string CVV2;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VPOS_Library.Request;
-using VPOS_Library.Utils.MAC;
+﻿using VPOS_Library.Request;
 using VPOS_Library.XMLModels.Request;
 
 namespace VPOS_Library.Utils
@@ -37,7 +33,7 @@ namespace VPOS_Library.Utils
                 Currency = request.Currency,
                 CVV2 = request.CVV2,
 
-                Data3DS = AESEncoder.Encode3DSData(request.MerchantKey, request.ThreeDSData.ToJSONString()),
+                ThreeDSData = AESEncoder.Encode3DSData(request.MerchantKey, request.ThreeDSData.ToJSONString()),
                 EmailCH = request.EmailCh,
                 ExpDate = request.ExpDate,
                 Exponent = request.Exponent,
@@ -47,6 +43,7 @@ namespace VPOS_Library.Utils
                 Network = request.Network,
                 NotifUrl = request.NotifyUrl,
                 OpDescr = request.OpDescr,
+                OrderID = request.OrderId,
                 Options = request.Options,
                 PAN = request.Pan,
                 ProductRef = request.ProductRef,
@@ -128,6 +125,16 @@ namespace VPOS_Library.Utils
             return requestXML;
         }
 
+        public static BPWXmlRequest<OrderStatusRequestXML> MapOrderStatusRequest(OrderStatusRequest statusRequest, string shopId)
+        {
+            var requestData = new OrderStatusRequestXML();
+            requestData.OrderID = statusRequest.OperatorID;
+            requestData.ProductRef = statusRequest.ProductRef;
+            var requestXML = new BPWXmlRequest<OrderStatusRequestXML>(requestData);
+
+            requestXML.SetHeaderInfo(shopId, statusRequest.OperatorID);
+            return requestXML;
+        }
 
     }
 }

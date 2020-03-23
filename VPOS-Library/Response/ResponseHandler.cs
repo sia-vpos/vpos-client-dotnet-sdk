@@ -85,5 +85,25 @@ namespace VPOS_Library.Utils.MAC
                 panAliasData.PanAliasTail
             };
         }
+
+        public static List<string> ThreeDSChallengeMacList(ThreeDSChallenge threeDSMethod)
+        {
+            return new List<string>
+            {
+                threeDSMethod.ThreeDSTransId,
+                threeDSMethod.CReq,
+                threeDSMethod.ACSUrl
+            };
+        }
+
+        public static List<string> ThreeDSMethodMacList(ThreeDSMethod threeDSMethod) 
+        {
+            return new List<string>
+            {
+                threeDSMethod.ThreeDSTransId,
+                threeDSMethod.ThreeDSMethodData,
+                threeDSMethod.ThreeDSMethodUrl
+            };
+        }
     }
 }

@@ -41,6 +41,7 @@ namespace VPOS_Library.XML.Models
     {
         public string ProductRef;
         public string NumberOfItems;
+        public PanAliasData PanAliasData;
         [XmlElement("Authorization")] public List<Authorization> Authorizations;
     }
 

@@ -190,7 +190,8 @@ namespace VPOS_Library.Utils.MAC
             dictionary.Add("NAME", specificRequest.Name);
             dictionary.Add("SURNAME", specificRequest.Surname);
             dictionary.Add("TAXID", specificRequest.TaxID);
-            dictionary.Add("THREEDSDATA", specificRequest.Data3DS);
+            dictionary.Add("THREEDSDATA", specificRequest.ThreeDSData);
+            dictionary.Add("NAMECH", specificRequest.NameCH);
             dictionary.Add("NOTIFURL", specificRequest.NotifUrl);
             dictionary.Add("THREEDSMTDNOTIFURL", specificRequest.ThreeDSMtdNotifUrl);
             dictionary.Add("CHALLENGEWINSIZE", specificRequest.ChallengeWinSize);
