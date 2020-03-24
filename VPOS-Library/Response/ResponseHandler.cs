@@ -86,13 +86,13 @@ namespace VPOS_Library.Utils.MAC
             };
         }
 
-        public static List<string> ThreeDSChallengeMacList(ThreeDSChallenge threeDSMethod)
+        public static List<string> ThreeDSChallengeMacList(ThreeDSChallenge threeDSChallenge)
         {
             return new List<string>
             {
-                threeDSMethod.ThreeDSTransId,
-                threeDSMethod.CReq,
-                threeDSMethod.ACSUrl
+                threeDSChallenge.ThreeDSTransId,
+                threeDSChallenge.CReq,
+                threeDSChallenge.URLAcs
             };
         }
 

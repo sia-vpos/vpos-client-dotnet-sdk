@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VPOS_Library.Models;
 using VPOS_Library.Request;
+using VPOS_Library.Response;
 using VPOS_Library.XML.Models;
 using VPOS_Library.XMLModels.Request;
 
@@ -13,17 +14,17 @@ namespace VPOS_Library.Client
 
         bool VerifyMac(string urlDone);
 
-        BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize0(ThreeDSAuthorization0Request request);
+        ThreeDSAuthorization0Response ThreeDSAuthorize0(ThreeDSAuthorization0Request request);
 
-        BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize1(ThreeDSAuthorization1Request request);
+        ThreeDSAuthorization1Response ThreeDSAuthorize1(ThreeDSAuthorization1Request request);
 
-        BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize2(ThreeDSAuthorization2Request request);
+        ThreeDSAuthorization2Response ThreeDSAuthorize2(ThreeDSAuthorization2Request request);
 
-        BPWXmlResponse<DataManageOperation> Capture(CaptureRequest request);
+        CaptureResponse Capture(CaptureRequest request);
 
-        BPWXmlResponse<DataManageOperation> Refund(RefundRequest request);
+        RefundResponse Refund(RefundRequest request);
 
-        BPWXmlResponse<DataOrderStatus> GetOrderStatus(OrderStatusRequest request);
+        OrderStatusResponse GetOrderStatus(OrderStatusRequest request);
 
     }
 }

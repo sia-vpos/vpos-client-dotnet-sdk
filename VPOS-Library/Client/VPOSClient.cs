@@ -5,11 +5,11 @@ using VPOS_Library.Utils.Exception;
 using VPOS_Library.Utils.MAC;
 using VPOS_Library.XML;
 using VPOS_Library.XML.Models;
-using VPOS_Library.XMLModels.Request;
 using VPOS_Library.Request;
 using Operation = VPOS_Library.XML.Models.Operation;
 using java.lang;
 using System.Web;
+using VPOS_Library.Response;
 
 namespace VPOS_Library.Client
 {
@@ -127,7 +127,7 @@ namespace VPOS_Library.Client
                 
         }
 
-        public BPWXmlResponse<DataAuthorize> Authorize(AuthorizeRequest authorize) {
+        public AuthorizeResponse Authorize(AuthorizeRequest authorize) {
             // Validate request
             RequestValidator.ValidateAuthorizeRequest(authorize);
             // Map input request in the XML Request
@@ -143,10 +143,11 @@ namespace VPOS_Library.Client
             VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
             VerifyPanAliasData(objectResponse.Data.PanAliasData);
-            return objectResponse;
+            //Response Mapping        
+            return ResponseMapper.MapAuthorize(objectResponse); ;
         }
 
-        public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize0(ThreeDSAuthorization0Request request) {
+        public ThreeDSAuthorization0Response ThreeDSAuthorize0(ThreeDSAuthorization0Request request) {
             // Validate request
             RequestValidator.ValidateThreeDSAuthorize0Request(request);
             // Map input request in the XML Request
@@ -166,10 +167,10 @@ namespace VPOS_Library.Client
             VerifyPanAliasData(objectResponse.Data.PanAliasData);
             VerifyThreeDSChallenge(objectResponse.Data.ThreeDSChallenge);
             VerifyThreeDSMethod(objectResponse.Data.ThreeDSMethod);
-            return objectResponse;
+            return ResponseMapper.MapThreeDSAuthorization0(objectResponse);
         }
 
-        public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize1(ThreeDSAuthorization1Request request)
+        public ThreeDSAuthorization1Response ThreeDSAuthorize1(ThreeDSAuthorization1Request request)
         {
             // Validate request
             RequestValidator.ValidateThreeDSAuthorize1Request(request);
@@ -187,10 +188,10 @@ namespace VPOS_Library.Client
             VerifyAuthorization(objectResponse.Data.Authorization);
             VerifyPanAliasData(objectResponse.Data.PanAliasData);
             VerifyThreeDSChallenge(objectResponse.Data.ThreeDSChallenge);           
-            return objectResponse;
+            return ResponseMapper.MapThreeDSAuthorization1(objectResponse);
         }
 
-        public BPWXmlResponse<Data3DSResponse> ThreeDSAuthorize2(ThreeDSAuthorization2Request request)
+        public ThreeDSAuthorization2Response ThreeDSAuthorize2(ThreeDSAuthorization2Request request)
         {
             // Validate request
             RequestValidator.ValidateThreeDSAuthorize2Request(request);
@@ -206,10 +207,10 @@ namespace VPOS_Library.Client
             VerifyMacResponse(objectResponse);
             VerifyAuthorization(objectResponse.Data.Authorization);
             VerifyPanAliasData(objectResponse.Data.PanAliasData);
-            return objectResponse;
+            return ResponseMapper.MapThreeDSAuthorization2(objectResponse);
         }
         
-        public BPWXmlResponse<DataManageOperation> Capture(CaptureRequest captureRequest)
+        public CaptureResponse Capture(CaptureRequest captureRequest)
         {
             // Validate request
             RequestValidator.ValidateCaptureRequest(captureRequest);
@@ -224,10 +225,10 @@ namespace VPOS_Library.Client
             // Verify Mac Response
             VerifyMacResponse(objectResponse);
             VerifyOperation(objectResponse.Data.Operation);
-            return objectResponse;
+            return ResponseMapper.MapCaptureResponse(objectResponse);
         }
 
-        public BPWXmlResponse<DataManageOperation> Refund(RefundRequest request)
+        public RefundResponse Refund(RefundRequest request)
         {
             // Validate Request
             RequestValidator.ValidateRefundRequest(request);
@@ -242,10 +243,10 @@ namespace VPOS_Library.Client
             // Verify Mac Response
             VerifyMacResponse(objectResponse);
             VerifyOperation(objectResponse.Data.Operation);
-            return objectResponse;
+            return ResponseMapper.MapRefundResponse(objectResponse);
         }
 
-        public BPWXmlResponse<DataOrderStatus> GetOrderStatus(OrderStatusRequest orderStatusRequest)
+        public OrderStatusResponse GetOrderStatus(OrderStatusRequest orderStatusRequest)
         {
             // Validate Request
             RequestValidator.ValidateOrderStatusRequest(orderStatusRequest);
@@ -263,7 +264,7 @@ namespace VPOS_Library.Client
             foreach (var authorization in objectResponse.Data.Authorizations)
                 VerifyAuthorization(authorization);
 
-            return objectResponse;
+            return ResponseMapper.MapOrderStatusResponse(objectResponse);
         }
 
         private void VerifyAuthorization(Authorization authorization)

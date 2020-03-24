@@ -108,7 +108,7 @@ namespace VPOS_Test
             var requestData = new OrderStatusRequest(SHOP_ID,OPERATOR_ID, "042221867378323197573301");
             
             var response = vposClient.GetOrderStatus(requestData);
-            Console.WriteLine(response.Data.Authorizations[0]);
+            Console.WriteLine(response);
         }
 
         static void TestAuthorize() {
@@ -118,7 +118,7 @@ namespace VPOS_Test
             requestData.CVV2 = "111";
             requestData.EmailCh = "asd@gmail.it";
             var response = vposClient.Authorize(requestData);
-            Console.WriteLine(response.Data.Authorization);
+            Console.WriteLine(response);
         }
 
         static void TestGetHtmlDocument()
@@ -167,7 +167,7 @@ namespace VPOS_Test
             test.ThreeDSData = build3DSData3DS2();
             test.MerchantKey = API_RESULT_KEY;
             var response = vposClient.ThreeDSAuthorize0(test);
-            Console.WriteLine(response.Data.Authorization);
+            Console.WriteLine(response);
 
         }
 
@@ -177,7 +177,7 @@ namespace VPOS_Test
             var test = new ThreeDSAuthorization1Request();
             test.OperatorID = "Operator id";
             test.ThreeDSMtdComplInd = "N";
-            test.ThreeDSTransId = "ea8485d2-3ade-4029-b29d-05774a461b7e";
+            test.ThreeDSTransId = "b6e2d973-a32a-4e75-bbf7-32a426c358ac";
             var response = vposClient.ThreeDSAuthorize1(test);
             Console.WriteLine(response);
         }

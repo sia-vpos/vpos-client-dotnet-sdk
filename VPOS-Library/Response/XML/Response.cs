@@ -117,7 +117,7 @@ namespace VPOS_Library.XML.Models
     {
         public string ThreeDSTransId;
         public string CReq;
-        public string ACSUrl;
+        public string URLAcs;
         public string MAC;
     }
 
