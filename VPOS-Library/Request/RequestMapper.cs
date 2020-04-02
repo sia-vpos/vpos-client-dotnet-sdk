@@ -128,7 +128,7 @@ namespace VPOS_Library.Utils
         public static BPWXmlRequest<OrderStatusRequestXML> MapOrderStatusRequest(OrderStatusRequest statusRequest, string shopId)
         {
             var requestData = new OrderStatusRequestXML();
-            requestData.OrderID = statusRequest.OperatorID;
+            requestData.OrderID = statusRequest.OrderId;
             requestData.ProductRef = statusRequest.ProductRef;
             var requestXML = new BPWXmlRequest<OrderStatusRequestXML>(requestData);
 

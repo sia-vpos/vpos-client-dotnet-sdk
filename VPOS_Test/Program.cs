@@ -2,10 +2,9 @@
 using System.Xml.Serialization;
 using VPOS_Library.Client;
 using VPOS_Library.Models;
-using VPOS_Library.Utils.MAC;
+using VPOS_Library.Request;
 using VPOS_Library.Utils;
 using VPOS_Library.XML;
-using VPOS_Library.Request;
 using VPOS_Library.XMLModels.Request;
 
 namespace VPOS_Test
@@ -47,8 +46,9 @@ namespace VPOS_Test
             //TestRefund();
             //TestAuthorize();
             //TestThreeDSAuthorize0();
-            TestThreeDSAuthorize1();
+            //TestThreeDSAuthorize1();
             //TestGetHtmlDocument();
+            TestGetHtmlDocumentTOKEN();
         }
 
         static void TestRestClient()
@@ -75,7 +75,7 @@ namespace VPOS_Test
         static void TestRefund()
         {
             var vposClient = new VPOSClient(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
 
             var requestData = new RefundRequest();
             requestData.Amount = "10";
@@ -90,7 +90,7 @@ namespace VPOS_Test
         static void TestAccounting()
         {
             var vposClient = new VPOSClient(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
             var requestData = new CaptureRequest();
             requestData.Amount = "10";
             requestData.Currency = "978";
@@ -104,8 +104,8 @@ namespace VPOS_Test
         static void TestOrderStatus()
         {
             var vposClient = new VPOSClient(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
-            var requestData = new OrderStatusRequest(SHOP_ID,OPERATOR_ID, "042221867378323197573301");
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
+            var requestData = new OrderStatusRequest(SHOP_ID,OPERATOR_ID, "AUTH123456769123246");
             
             var response = vposClient.GetOrderStatus(requestData);
             Console.WriteLine(response);
@@ -113,7 +113,7 @@ namespace VPOS_Test
 
         static void TestAuthorize() {
             var vposClient = new VPOSClient(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
             var requestData = new AuthorizeRequest("12345676912", "OPERATOR", "4598250000000027", "2112", "6000", "978", "I", "93");
             requestData.CVV2 = "111";
             requestData.EmailCh = "asd@gmail.it";
@@ -124,7 +124,7 @@ namespace VPOS_Test
         static void TestGetHtmlDocument()
         {
             var vposClient = new VPOSClient(URL_WEB_API,
-                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
             var paymentInfo = new PaymentInfo();
             paymentInfo.Amount = "1000";
             paymentInfo.Currency = "978";
@@ -135,15 +135,44 @@ namespace VPOS_Test
             paymentInfo.UrlMs = URLMS;
             paymentInfo.AccountingMode = "D";
             paymentInfo.AuthorMode = "I";
-            paymentInfo.AddOption('M');
+            //paymentInfo.AddOption('M');
             paymentInfo.Data3DS = build3DSData();
             
+            Console.WriteLine(vposClient.BuildHtmlPaymentFragment(paymentInfo));
+        }
+        static void TestGetHtmlDocumentTOKEN()
+        {
+            var vposClient = new VPOSClient(URL_WEB_API,
+                API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
+            var paymentInfo = new PaymentInfo();
+            paymentInfo.Amount = "1000";
+            paymentInfo.Currency = "978";
+            paymentInfo.OrderId = new Random().Next(999999999).ToString();
+            paymentInfo.ShopId = SHOP_ID;
+            paymentInfo.UrlBack = URL_BACK;
+            paymentInfo.UrlDone = URL_DONE;
+            paymentInfo.UrlMs = URLMS;
+            paymentInfo.AccountingMode = "D";
+            paymentInfo.AuthorMode = "I";
+            //paymentInfo.AddOption('M');
+            paymentInfo.Data3DS = build3DSData();
+            paymentInfo.Token = "0000500550493297466";
+            paymentInfo.ExpDate = "2112";
+            paymentInfo.TRecurr = "U";
+            paymentInfo.CRecurr = "899107067200401";
+            paymentInfo.NameCH = "Mario";
+            paymentInfo.SurnameCH = "Rossi";
+            paymentInfo.Network = "98";
+            paymentInfo.Email = "test@tes.it";
+            paymentInfo.Exponent = "2";
+            paymentInfo.ShopEmail = "test@tes.it";
+
             Console.WriteLine(vposClient.BuildHtmlPaymentFragment(paymentInfo));
         }
 
         static void TestThreeDSAuthorize0() {
             var vposClient = new VPOSClient(URL_WEB_API,
-               API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+               API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
             var test = new ThreeDSAuthorization0Request();
             test.Amount="6600";
             test.AccountingMode="D";
@@ -173,7 +202,7 @@ namespace VPOS_Test
 
         static void TestThreeDSAuthorize1() {
             var vposClient = new VPOSClient(URL_WEB_API,
-              API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID);
+              API_RESULT_KEY, MAC_KEY_VPOS, SHOP_ID, URL_REDIRECT);
             var test = new ThreeDSAuthorization1Request();
             test.OperatorID = "Operator id";
             test.ThreeDSMtdComplInd = "N";

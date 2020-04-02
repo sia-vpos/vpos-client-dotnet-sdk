@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using java.lang;
+using System.Collections.Generic;
+using System.Web;
 using VPOS_Library.Models;
+using VPOS_Library.Request;
+using VPOS_Library.Response;
 using VPOS_Library.Utils;
 using VPOS_Library.Utils.Exception;
 using VPOS_Library.Utils.MAC;
 using VPOS_Library.XML;
 using VPOS_Library.XML.Models;
-using VPOS_Library.Request;
 using Operation = VPOS_Library.XML.Models.Operation;
-using java.lang;
-using System.Web;
-using VPOS_Library.Response;
 
 namespace VPOS_Library.Client
 {
@@ -27,38 +27,39 @@ namespace VPOS_Library.Client
         private readonly MacEncoder _encoder;
         private readonly HtmlTool _htmlTool;
 
-        public VPOSClient(string redirectUrl, string apiResultKey, string startKey, string shopId)
+        public VPOSClient(string apiUrl, string apiResultKey, string startKey, string shopId, string redirectUrl)
         {
 
             _encoder = new MacEncoder();
-            _restClient = new RestClient();
+            _restClient = new RestClient(15);
             _htmlTool = new HtmlTool();
-            _urlAPI = redirectUrl;
+            _urlAPI = apiUrl;
             _apiResultKey = apiResultKey;
             _startKey = startKey;
             _shopId = shopId;
+            _urlRedirect = redirectUrl;
         }
 
         public VPOSClient(Config config)
         {
             ValidateConfig(config);
-            _urlAPI = config.apiUrl;
-            _apiResultKey = config.apiKey;
-            _startKey = config.redirectKey;
-            _shopId = config.shopID;
-            _urlRedirect = config.redirectUrl;
+            _urlAPI = config.ApiUrl;
+            _apiResultKey = config.ApiKey;
+            _startKey = config.RedirectKey;
+            _shopId = config.ShopID;
+            _urlRedirect = config.RedirectUrl;
 
             _encoder = new MacEncoder();
-            _restClient = new RestClient();
+            _restClient = new RestClient(config.Timeout);
             _htmlTool = new HtmlTool();
 
-            if (config.proxyHost != null && !string.IsNullOrEmpty(config.proxyPort.ToString())) {
-                if (config.proxyUsername != null && config.proxyPassword != null)
+            if (config.ProxyHost != null && !string.IsNullOrEmpty(config.ProxyPort.ToString())) {
+                if (config.ProxyUsername != null && config.ProxyPassword != null)
                 {
-                    SetProxy(config.proxyHost, config.proxyPort, config.proxyUsername, config.proxyPassword);
+                    SetProxy(config.ProxyHost, config.ProxyPort, config.ProxyUsername, config.ProxyPassword);
                 }
                 else {
-                    SetProxy(config.proxyHost, config.proxyPort);
+                    SetProxy(config.ProxyHost, config.ProxyPort);
                 }
             }
 
@@ -67,23 +68,23 @@ namespace VPOS_Library.Client
         private void ValidateConfig(Config config)
         {
             List<string> fields = new List<string>();
-            if (config.shopID == null)
+            if (config.ShopID == null)
             {
                 fields.Add("SHOPID");
             }
-            else if (config.apiKey == null)
+            else if (config.ApiKey == null)
             {
                 fields.Add("APIRESULTKEY");
             }
-            else if (config.apiUrl == null)
+            else if (config.ApiUrl == null)
             {
                 fields.Add("APIURL");
             }
-            else if (config.redirectKey == null)
+            else if (config.RedirectKey == null)
             {
                 fields.Add("REDIRECTKEY");
             }
-            else if (config.redirectUrl == null)
+            else if (config.RedirectUrl == null)
             {
                 fields.Add("REDIRECTURL");
             }

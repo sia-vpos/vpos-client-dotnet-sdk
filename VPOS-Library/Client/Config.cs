@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VPOS_Library.Client
+﻿namespace VPOS_Library.Client
 {
     public interface Config
     {
-        String shopID { get; set; }
+        string ShopID { get; set; }
 
-         String redirectKey { get; set; }
+        string RedirectKey { get; set; }
 
-         String redirectUrl { get; set; }
+        string RedirectUrl { get; set; }
 
-         String apiKey { get; set; }
+        string ApiKey { get; set; }
 
-         String proxyHost { get; set; }
+        string ProxyHost { get; set; }
 
-         int proxyPort { get; set; }
+         int ProxyPort { get; set; }
 
-         String proxyUsername { get; set; }
+        string ProxyUsername { get; set; }
 
-         String proxyPassword { get; set; }
+        string ProxyPassword { get; set; }
 
-         String apiUrl { get; set; }
+        string ApiUrl { get; set; }
 
-         String algorithm { get; set; }
+        string Algorithm { get; set; }
 
-        
+        int Timeout { get; set; }
+
+
     }
 }

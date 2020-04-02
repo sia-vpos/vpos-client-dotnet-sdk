@@ -33,6 +33,16 @@
         public string ProductRef { get; set; }
         public string AntiFraud { get; set; }
         public Data3DSJSON Data3DS { get; set; }
+        public string Network { get; set; }
+        public string Token { get; set; }
+        public string ExpDate { get; set; }
+        public string TRecurr { get; set; }
+        public string CRecurr { get; set; }
+        public string IBAN { get; set; }
+        public string SurnameCH { get; set; }
+        public string NameCH { get; set; }
+        public string Email { get; set; }
+        
 
         public void AddOption(char option)
         {

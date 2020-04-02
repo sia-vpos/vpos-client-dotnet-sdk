@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 
 namespace VPOS_Library.Utils
 {
@@ -11,11 +7,18 @@ namespace VPOS_Library.Utils
     {
         private const string InputPattern = "<input type=\"hidden\" name=\"KEY\" value=\"VALUE\">";
 
-        private const string Template = "<div><form id=\"myForm\"action=\"[VPOS_URL]\" method=\"POST\"><input name=\"PAGE\" type=\"hidden\" value=\"LAND\">[PARAMETERS]</form><script>document.getElementById('myForm').submit();</script></div>";
+        private const string Template = "<div><form id=\"myForm\"action=\"[VPOS_URL]\" method=\"POST\"><input name=\"PAGE\" type=\"hidden\" value=\"[PAGE_VALUE]\">[PARAMETERS]</form><script>document.getElementById('myForm').submit();</script></div>";
 
         public string BuildHtml(string vposUrl, OrderedDictionary values)
         {
             var html = Template;
+            if (values.Contains("TOKEN"))
+            {
+                html = html.Replace("[PAGE_VALUE]", "TOKEN");
+            }
+            else {
+                html = html.Replace("[PAGE_VALUE]", "LAND");
+            }
             html = html.Replace("[VPOS_URL]", vposUrl);
             html = html.Replace("[PARAMETERS]", GenerateParamsHtml(values));  
             return html;

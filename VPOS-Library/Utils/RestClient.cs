@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using VPOS_Library.Utils.Exception;
 
 namespace VPOS_Library.Utils
 {
@@ -11,25 +11,28 @@ namespace VPOS_Library.Utils
     {
         private static HttpClient _client = new HttpClient();
 
-        public RestClient()
+        public RestClient(int timeout)
         {
             _client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            _client.Timeout = TimeSpan.FromSeconds(timeout);
         }
 
         public string CallApi(string url, string xmlBody)
         {
-            var dict = new Dictionary<string, string>
+            try
             {
-                {"data", xmlBody}
-            };
-            var data = new StringContent("data=" + xmlBody, Encoding.UTF8, "application/x-www-form-urlencoded");
-            Console.WriteLine("Sending request to " + url + " with body: \n" + data.ReadAsStringAsync().Result);
-            var response = _client.PostAsync(url, data).Result;
+                var data = new StringContent("data=" + xmlBody, Encoding.UTF8, "application/x-www-form-urlencoded");
+                Console.WriteLine("Sending request to " + url + " with body: \n" + data.ReadAsStringAsync().Result);
+                var response = _client.PostAsync(url, data).Result;
 
-            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
-            return response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            catch {
+                throw new VPOSClientException("Connection Error while contacting VPOS");
+            }
         }
 
         public void SetProxy(string proxyName, int port, string user, string password)

@@ -47,34 +47,60 @@ namespace VPOS_Library.Utils.MAC
             result.Add("ACCOUNTINGMODE", paymentInfo.AccountingMode);
             result.Add("AUTHORMODE", paymentInfo.AuthorMode);
             result.Add("OPTIONS", paymentInfo.GetOptions());
-            result.Add("NAME", paymentInfo.Name);
-            result.Add("SURNAME", paymentInfo.Surname);
+            if (paymentInfo.GetOptions() != null && paymentInfo.GetOptions().Contains("B"))
+            {    
+                result.Add("NAME", paymentInfo.Name);
+                result.Add("SURNAME", paymentInfo.Surname); 
+            }
             result.Add("TAXID", paymentInfo.TaxId);
             result.Add("LOCKCARD", paymentInfo.Lockcard);
-            result.Add("COMMIS", paymentInfo.Commis);
-            result.Add("ORDDESCR", paymentInfo.OrdDescr);
+            if (paymentInfo.GetOptions() != null && paymentInfo.GetOptions().Contains("F"))
+            {
+                result.Add("COMMIS", paymentInfo.Commis);
+            }
+            if (paymentInfo.GetOptions() != null && (paymentInfo.GetOptions().Contains("O")|| paymentInfo.GetOptions().Contains("V")))
+            {
+                result.Add("ORDDESCR", paymentInfo.OrdDescr);
+            }
             result.Add("VSID", paymentInfo.Vsid);
             result.Add("OPDESCR", paymentInfo.OpDescr);
-            result.Add("REMAININGDURATION", paymentInfo.RemainingDuration);
+            if (paymentInfo.GetOptions() != null && paymentInfo.GetOptions().Contains("D"))
+            {
+                result.Add("REMAININGDURATION", paymentInfo.RemainingDuration);
+            }
             result.Add("USERID", paymentInfo.UserId);
             result.Add("BP_POSTEPAY", paymentInfo.BpPostepay);
             result.Add("BP_CARDS", paymentInfo.BpCards);
-            result.Add("PHONENUMBER", paymentInfo.PhoneNumber);
-            result.Add("CAUSATION", paymentInfo.Causation);
-            result.Add("USER", paymentInfo.User);
+            if (paymentInfo.Network != null && paymentInfo.Network.Equals("91"))
+            {
+                result.Add("PHONENUMBER", paymentInfo.PhoneNumber);
+                result.Add("CAUSATION", paymentInfo.Causation);
+                result.Add("USER", paymentInfo.User);
+            }
             result.Add("PRODUCTREF", paymentInfo.ProductRef);
             result.Add("ANTIFRAUD", paymentInfo.AntiFraud);
             if (paymentInfo.Data3DS != null)
             {
                 result.Add("3DSDATA", AESEncoder.Encode3DSData(apiSecretKey, paymentInfo.Data3DS.ToJSONString()));
             }
+            result.Add("TRECURR", paymentInfo.TRecurr);
+            result.Add("CRECURR", paymentInfo.CRecurr);
+            result.Add("TOKEN", paymentInfo.Token);
+            result.Add("EXPDATE", paymentInfo.ExpDate);
+            result.Add("NETWORK", paymentInfo.Network);
+            result.Add("IBAN", paymentInfo.IBAN);
             return result;
         }
 
         public static void AddMissingParameter(OrderedDictionary dictionary, PaymentInfo info)
         {
             dictionary.Add("URLBACK", info.UrlBack);
+            dictionary.Add("LANG", info.Lang);
             dictionary.Add("SHOPEMAIL", info.ShopEmail);
+            dictionary.Add("EMAIL", info.Email);
+            dictionary.Add("NAMECH", info.NameCH);
+            dictionary.Add("SURNAMECH", info.SurnameCH);
+
         }
 
         private static void AddCommonParameters(GenericRequest request, OrderedDictionary dictionary)
