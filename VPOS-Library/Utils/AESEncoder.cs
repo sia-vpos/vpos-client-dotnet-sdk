@@ -1,10 +1,7 @@
 ﻿using javax.crypto.spec;
-using javax.crypto;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using javax.xml.bind;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace VPOS_Library.Utils
 {

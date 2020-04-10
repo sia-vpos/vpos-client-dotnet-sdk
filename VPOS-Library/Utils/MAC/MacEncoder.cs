@@ -17,7 +17,7 @@ namespace VPOS_Library.Utils.MAC
                 if (entry.Value != null)
                     macString += entry.Key + "=" + entry.Value + "&";
             macString = macString.Remove(macString.Length - 1);
-            Console.WriteLine(macString);
+            //Console.WriteLine(macString);
             return HashHmac(key, macString);
         }
 
@@ -25,7 +25,7 @@ namespace VPOS_Library.Utils.MAC
         {
             var macString = values.Aggregate("", (current, value) => (value != null) ? current + value.Trim() + "&" : current);
             macString = macString.Remove(macString.Length - 1);
-            Console.WriteLine(macString);
+            //Console.WriteLine(macString);
             return HashHmac(key, macString);
         }
 

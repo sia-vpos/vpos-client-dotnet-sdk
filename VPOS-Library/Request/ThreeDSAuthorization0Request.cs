@@ -36,7 +36,6 @@ namespace VPOS_Library.Request
         private string _cProf;
         private string _threeDSMtdNotifyUrl;
         private string _challengeWinSize;
-        private string _merchantKey;
         private string _options;
 
         public string OrderId { get { return _orderId; } set { _orderId = value; } }
@@ -96,8 +95,6 @@ namespace VPOS_Library.Request
         public string ThreeDSMtdNotifyUrl { get { return _threeDSMtdNotifyUrl; } set { _threeDSMtdNotifyUrl = value; } }
 
         public string ChallengeWinSize { get { return _challengeWinSize; } set { _challengeWinSize = value; } }
-
-        public string MerchantKey { get { return _merchantKey; } set { _merchantKey = value; } }
 
     }
 }

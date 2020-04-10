@@ -6,7 +6,6 @@
         public string Currency { get; set; }
         public string Exponent { get; set; }
         public string OrderId { get; set; }
-        public string ShopId { get; set; }
         public string UrlBack { get; set; }
         public string UrlDone { get; set; }
         public string UrlMs { get; set; }

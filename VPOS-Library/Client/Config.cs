@@ -1,4 +1,6 @@
-﻿namespace VPOS_Library.Client
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace VPOS_Library.Client
 {
     public interface Config
     {
@@ -24,6 +26,7 @@
 
         int Timeout { get; set; }
 
+        X509Certificate2 Certificate { get ; set ;}
 
     }
 }

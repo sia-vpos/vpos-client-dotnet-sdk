@@ -12,7 +12,7 @@ namespace VPOS_Library.Utils
         public string BuildHtml(string vposUrl, OrderedDictionary values)
         {
             var html = Template;
-            if (values.Contains("TOKEN"))
+            if (values.Contains("TOKEN") && values["TOKEN"]  != null)
             {
                 html = html.Replace("[PAGE_VALUE]", "TOKEN");
             }

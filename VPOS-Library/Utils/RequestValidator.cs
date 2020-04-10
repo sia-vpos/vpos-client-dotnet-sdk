@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using VPOS_Library.Models;
 using VPOS_Library.Request;
 using VPOS_Library.Utils.Exception;
 
@@ -371,6 +370,27 @@ namespace VPOS_Library.Utils
                 foreach (string field in fields)
                     message = message + " " + field;
                 throw new VPOSClientException("Invalid Request! The following field/s are not valid or missing:" + message);
+            }
+        }
+
+        public static void validateThreeDsData(Data3DSJSON data, List<string> fields)
+        {
+            if (data.browserAcceptHeader == null)
+            {
+                fields.Add("browserAcceptHeader");
+            }
+            if(data.browserColorDepth == null){
+                fields.Add( "browserColorDepth");
+            }if(data.browserJavaEnabled == null){
+                fields.Add( "browserJavaEnabled");
+            }if(data.browserIP == null){
+                fields.Add( "browserIP");
+            }if(data.browserLanguage == null){
+                fields.Add( "browserLanguage");
+            }if(data.browserScreenHeight == null){
+                fields.Add( "browserScreenHeight");
+            }if(data.browserScreenWidth == null){
+                fields.Add( "browserScreenWidth");
             }
         }
     }

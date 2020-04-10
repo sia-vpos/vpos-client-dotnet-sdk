@@ -1,4 +1,5 @@
 ﻿using java.lang;
+using System;
 using System.Collections.Generic;
 using System.Web;
 using VPOS_Library.Models;
@@ -50,9 +51,14 @@ namespace VPOS_Library.Client
             _urlRedirect = config.RedirectUrl;
 
             _encoder = new MacEncoder();
-            _restClient = new RestClient(config.Timeout);
             _htmlTool = new HtmlTool();
-
+            if (config.Certificate != null)
+            {
+                _restClient = new RestClient(config.Timeout, config.Certificate);
+            }
+            else {
+                _restClient = new RestClient(config.Timeout);
+            }
             if (config.ProxyHost != null && !string.IsNullOrEmpty(config.ProxyPort.ToString())) {
                 if (config.ProxyUsername != null && config.ProxyPassword != null)
                 {
@@ -88,7 +94,7 @@ namespace VPOS_Library.Client
             {
                 fields.Add("REDIRECTURL");
             }
-            if (fields.Count == 0)
+            if (fields.Count > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Invalid or missing configuration params: ");
@@ -104,7 +110,7 @@ namespace VPOS_Library.Client
         public string BuildHtmlPaymentFragment(PaymentInfo paymentInfo)
         {
             // Build dictionary with input params
-            var redirectDictionary = RequestHandler.GetRedirectDictionary(paymentInfo, _apiResultKey);
+            var redirectDictionary = RequestHandler.GetRedirectDictionary(paymentInfo, _apiResultKey, _shopId);
             //Calculate MAC and add to dictionary
             var redirectMac = _encoder.GetMac(redirectDictionary, _startKey);
             redirectDictionary.Add("MAC", redirectMac);
@@ -120,10 +126,12 @@ namespace VPOS_Library.Client
             var paramsDictionary = Utils.Utils.splitQuery(urlDone);
             // Get received MAC
             var receivedMAc = paramsDictionary["MAC"];
+
             // Calculate MAC
             var ordereDictionary = Utils.Utils.getUrlDoneDictionary(paramsDictionary);
-            var redirectMac = _encoder.GetMac(ordereDictionary, _startKey);
+            var redirectMac = _encoder.GetMac(ordereDictionary, _apiResultKey);
             // Compare the received Mac with the calculated one
+
             return redirectMac.Equals(receivedMAc);
                 
         }
@@ -152,7 +160,7 @@ namespace VPOS_Library.Client
             // Validate request
             RequestValidator.ValidateThreeDSAuthorize0Request(request);
             // Map input request in the XML Request
-            var requestXML = RequestMapper.MapThreeDSAuthorization0Request(request,_shopId);
+            var requestXML = RequestMapper.MapThreeDSAuthorization0Request(request,_shopId, _apiResultKey);
             // Calculate and set MAC
             requestXML.Request.MAC = _encoder.GetMac(RequestHandler.GetMacDictionary(requestXML), _apiResultKey);
             // Url Encode ThreeDSData to correctly send it

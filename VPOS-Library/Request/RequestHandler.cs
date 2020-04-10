@@ -34,13 +34,13 @@ namespace VPOS_Library.Utils.MAC
             return result;
         }
 
-        public static OrderedDictionary GetRedirectDictionary(PaymentInfo paymentInfo, string apiSecretKey)
+        public static OrderedDictionary GetRedirectDictionary(PaymentInfo paymentInfo, string apiSecretKey, string shopId)
         {
             var result = new OrderedDictionary();
             result.Add("URLMS", paymentInfo.UrlMs);
             result.Add("URLDONE", paymentInfo.UrlDone);
             result.Add("ORDERID", paymentInfo.OrderId);
-            result.Add("SHOPID", paymentInfo.ShopId);
+            result.Add("SHOPID", shopId);
             result.Add("AMOUNT", paymentInfo.Amount);
             result.Add("CURRENCY", paymentInfo.Currency);
             result.Add("EXPONENT", paymentInfo.Exponent);
@@ -231,7 +231,7 @@ namespace VPOS_Library.Utils.MAC
         }
         private static void ThreeDSAuthorization2Dictionary(GenericRequest request, OrderedDictionary dictionary)
         {
-            var specificRequest = (ThreeDSAuthorization1RequestXML)request;
+            var specificRequest = (ThreeDSAuthorization2RequestXML)request;
             AddCommonParameters(specificRequest, dictionary);
             dictionary.Add("THREEDSTRANSID", specificRequest.ThreeDSTransId);
             

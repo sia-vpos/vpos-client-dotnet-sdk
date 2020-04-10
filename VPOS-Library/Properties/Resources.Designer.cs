@@ -59,14 +59,5 @@ namespace VPOS_Library.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string _default {
-            get {
-                return ResourceManager.GetString("_default", resourceCulture);
-            }
-        }
     }
 }

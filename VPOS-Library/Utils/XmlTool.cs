@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.ConstrainedExecution;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using VPOS_Library.XMLModels.Request;
@@ -32,7 +30,7 @@ namespace VPOS_Library.XML
             using (var sr = new StringReader(xml))
             {
                 var res = serializer.Deserialize(sr);
-                Console.WriteLine(res.ToString());
+                //Console.WriteLine(res.ToString());
                 return (T) res;
             }
         }

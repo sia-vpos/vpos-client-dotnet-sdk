@@ -20,7 +20,7 @@ namespace VPOS_Library.Utils
             return request;
         }
 
-        public static BPWXmlRequest<ThreeDSAuthorization0RequestXML> MapThreeDSAuthorization0Request(ThreeDSAuthorization0Request request, string shopId) {
+        public static BPWXmlRequest<ThreeDSAuthorization0RequestXML> MapThreeDSAuthorization0Request(ThreeDSAuthorization0Request request, string shopId, string apiKey) {
             var requestData = new ThreeDSAuthorization0RequestXML
             {
                 AccountingMode = request.AccountingMode,
@@ -33,7 +33,7 @@ namespace VPOS_Library.Utils
                 Currency = request.Currency,
                 CVV2 = request.CVV2,
 
-                ThreeDSData = AESEncoder.Encode3DSData(request.MerchantKey, request.ThreeDSData.ToJSONString()),
+                ThreeDSData = AESEncoder.Encode3DSData(apiKey, request.ThreeDSData.ToJSONString()),
                 EmailCH = request.EmailCh,
                 ExpDate = request.ExpDate,
                 Exponent = request.Exponent,
