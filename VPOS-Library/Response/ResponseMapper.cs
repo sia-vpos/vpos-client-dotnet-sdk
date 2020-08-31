@@ -55,7 +55,7 @@ namespace VPOS_Library.Response
             if (response.Data.ThreeDSChallenge != null)
             {
                 resp.Creq=response.Data.ThreeDSChallenge.CReq;
-                resp.AcsUrl=response.Data.ThreeDSChallenge.URLAcs;
+                resp.AcsUrl=response.Data.ThreeDSChallenge.ACSUrl;
                 resp.ThreeDSTransId=response.Data.ThreeDSChallenge.ThreeDSTransId;
 
             }
@@ -112,7 +112,7 @@ namespace VPOS_Library.Response
             if (response.Data.ThreeDSChallenge != null)
             {
                 resp.Creq = response.Data.ThreeDSChallenge.CReq;
-                resp.AcsUrl = response.Data.ThreeDSChallenge.URLAcs;
+                resp.AcsUrl = response.Data.ThreeDSChallenge.ACSUrl;
                 resp.ThreeDSTransId = response.Data.ThreeDSChallenge.ThreeDSTransId;
 
             }            

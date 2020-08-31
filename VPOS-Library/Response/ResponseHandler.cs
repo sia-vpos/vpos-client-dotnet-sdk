@@ -92,7 +92,7 @@ namespace VPOS_Library.Utils.MAC
             {
                 threeDSChallenge.ThreeDSTransId,
                 threeDSChallenge.CReq,
-                threeDSChallenge.URLAcs
+                threeDSChallenge.ACSUrl
             };
         }
 
