@@ -208,8 +208,8 @@ namespace VPOS_Library.Utils.MAC
             dictionary.Add("USERID", specificRequest.Userid);
             dictionary.Add("ACQUIRER", specificRequest.Acquirer);
             dictionary.Add("IPADDRESS", specificRequest.IpAddress);
-            dictionary.Add("OPDESCR", specificRequest.OpDescr);
             dictionary.Add("USRAUTHFLAG", specificRequest.UsrAuthFlag);
+            dictionary.Add("OPDESCR", specificRequest.OpDescr);
             dictionary.Add("OPTIONS", specificRequest.Options);
             dictionary.Add("ANTIFRAUD", specificRequest.Antifraud);
             dictionary.Add("PRODUCTREF", specificRequest.ProductRef);

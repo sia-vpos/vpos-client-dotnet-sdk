@@ -300,12 +300,15 @@ namespace VPOS_Library.Client
         }
 
         private void VerifyMacResponse<T>(BPWXmlResponse<T> response) {
+            string BAD_REQUEST = "03";
+            string INVALID_MAC = "04";
+
             if (response != null)
             {
                 var digest = _encoder.GetMac(ResponseHandler.ResponseMacList(response), _apiResultKey);
-                if (!digest.Equals(MacNeutralValue) && !digest.Equals(response.MAC))
+                if (!digest.Equals(MacNeutralValue) && String.Equals(BAD_REQUEST, response.Result) && String.Equals(INVALID_MAC, response.Result) && !digest.Equals(response.MAC))
                     throw new IncorrectMacException(
-                        "Verify digest not corresponding to the calculated one. Possible data corruption!");
+                        "The provided digest not corresponding to the calculated one. Possible data corruption!");
             }
         }
 
