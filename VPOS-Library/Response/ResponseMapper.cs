@@ -39,6 +39,11 @@ namespace VPOS_Library.Response
                 authorizationResponse.PaymentTypePP=auth.PaymentTypePP;
                 authorizationResponse.RRN=auth.RRN;
                 authorizationResponse.CardType=auth.CardType;
+                authorizationResponse.CardholderInfo=auth.CardholderInfo;
+                authorizationResponse.InstallmentsNumber=auth.InstallmentsNumber;
+                authorizationResponse.TicklerMerchantCode=auth.TicklerMerchantCode;
+                authorizationResponse.TicklerPlanCode=auth.TicklerPlanCode;
+                authorizationResponse.TicklerSubscriptionCode=auth.TicklerSubscriptionCode;
                 return authorizationResponse;
             }
             return authorizationResponse;
@@ -358,6 +363,20 @@ namespace VPOS_Library.Response
                 resp.PanAliasExpDate=panData.PanAliasExpDate;
                 resp.PanAliasRev=panData.PanAliasRev;
                 resp.PanAliasTail=panData.PanAliasTail;
+            }
+
+            if (response.Data != null && response.Data.CardHolderData != null)
+            {
+                CardHolderData cardHolderData = response.Data.CardHolderData;
+                resp.CardHolderName=cardHolderData.CardHolderName;
+                resp.CardHolderEmail=cardHolderData.CardHolderEmail;
+                resp.BillingAddressPostalcode=cardHolderData.BillingAddressPostalcode;
+                resp.BillingAddressCity=cardHolderData.BillingAddressCity;
+                resp.BillingAddressLine1=cardHolderData.BillingAddressLine1;
+                resp.BillingAddressLine2=cardHolderData.BillingAddressLine2;
+                resp.BillingAddressLine3=cardHolderData.BillingAddressLine3;
+                resp.BillingAddressState=cardHolderData.BillingAddressState;
+                resp.BillingAddressCountry=cardHolderData.BillingAddressCountry;
             }
 
             return resp;

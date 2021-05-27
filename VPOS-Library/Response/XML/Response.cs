@@ -42,6 +42,7 @@ namespace VPOS_Library.XML.Models
         public string ProductRef;
         public string NumberOfItems;
         public PanAliasData PanAliasData;
+        public CardHolderData CardHolderData;
         [XmlElement("Authorization")] public List<Authorization> Authorizations;
     }
 
@@ -94,6 +95,11 @@ namespace VPOS_Library.XML.Models
         public string PaymentTypePP;
         public string RRN;
         public string CardType;
+        public string CardholderInfo;
+        public string InstallmentsNumber;
+        public string TicklerMerchantCode;
+        public string TicklerPlanCode;
+        public string TicklerSubscriptionCode;
         public string MAC;
     }
 
@@ -103,6 +109,20 @@ namespace VPOS_Library.XML.Models
         public string PanAliasRev;
         public string PanAliasExpDate;
         public string PanAliasTail;
+        public string MAC;
+    }
+
+    public class CardHolderData : Printable
+    {
+        public string CardHolderName;
+        public string CardHolderEmail;
+        public string BillingAddressPostalcode;
+        public string BillingAddressCity;
+        public string BillingAddressLine1;
+        public string BillingAddressLine2;
+        public string BillingAddressLine3;
+        public string BillingAddressState;
+        public string BillingAddressCountry;
         public string MAC;
     }
 

@@ -30,5 +30,10 @@ namespace VPOS_Library.Response
         public string PaymentTypePP { get; set; }
         public string RRN { get; set; }
         public string CardType { get; set; }
+        public string CardholderInfo {get; set;}
+        public string InstallmentsNumber {get; set;}
+        public string TicklerMerchantCode {get; set;}
+        public string TicklerPlanCode {get; set;}
+        public string TicklerSubscriptionCode {get; set;}
     }
 }

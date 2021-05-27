@@ -37,7 +37,12 @@ namespace VPOS_Library.Utils.MAC
                 authorization.PanExpiryDate,
                 authorization.PaymentTypePP,
                 authorization.RRN,
-                authorization.CardType
+                authorization.CardType,
+                authorization.CardholderInfo,
+                authorization.InstallmentsNumber,
+                authorization.TicklerMerchantCode,
+                authorization.TicklerPlanCode,
+                authorization.TicklerSubscriptionCode
             };
         }
 
