@@ -611,7 +611,7 @@ namespace VPOS_Library.Utils
 
             public static string NAME = "PRODUCTREF";
             public static int MIN_LEN = 1;
-            public static int MAX_LEN = 15;
+            public static int MAX_LEN = 50;
             public static string PATTERN = ".{" + MIN_LEN + "," + MAX_LEN + "}";
             public static bool MANDATORY = true;
         }
