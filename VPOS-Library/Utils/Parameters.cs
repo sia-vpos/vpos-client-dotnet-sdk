@@ -482,7 +482,7 @@ namespace VPOS_Library.Utils
             public static string NAME = "OPERATORID";
             public static int MIN_LEN = 8;
             public static int MAX_LEN = 18;
-            public static string PATTERN = "[a-zA-Z0-9]{" + MIN_LEN + "," + MAX_LEN + "}";
+            public static string PATTERN = "^.{" + MIN_LEN + "," + MAX_LEN + "}$";
             public static bool MANDATORY = false; // RECOMMENDED
 
         }
