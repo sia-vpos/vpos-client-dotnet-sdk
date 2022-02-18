@@ -120,7 +120,7 @@ namespace VPOS_Library.Utils
         public static class AMOUNT
         {
             public static string NAME = "AMOUNT";
-            public static int MIN_LEN = 2;
+            public static int MIN_LEN = 1;
             public static int MAX_LEN = 8;
             public static string PATTERN = "[0-9]{" + MIN_LEN + "," + MAX_LEN + "}";
             public static bool MANDATORY = true;
